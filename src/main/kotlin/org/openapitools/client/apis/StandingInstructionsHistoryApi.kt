@@ -1,8 +1,8 @@
 package org.openapitools.client.apis
 
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Query
 import org.openapitools.client.models.GetStandingInstructionRunHistoryResponse
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface StandingInstructionsHistoryApi {
     /**
@@ -41,8 +41,8 @@ interface StandingInstructionsHistoryApi {
         @Query("fromAccountType") fromAccountType: Int? = null,
         @Query("locale") locale: String? = null,
         @Query("dateFormat") dateFormat: String? = null,
-        @Query("fromDate") fromDate: Any? = null,
-        @Query("toDate") toDate: Any? = null
+        @Query("fromDate") fromDate: String? = null,
+        @Query("toDate") toDate: String? = null
     ): GetStandingInstructionRunHistoryResponse
 
 }

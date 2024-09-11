@@ -1,5 +1,12 @@
 package org.openapitools.client.apis
 
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Multipart
+import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.Part
+import de.jensklingenberg.ktorfit.http.Path
+import de.jensklingenberg.ktorfit.http.Query
 import okhttp3.MultipartBody
 import org.openapitools.client.models.GetJournalEntriesTransactionIdResponse
 import org.openapitools.client.models.JournalEntryCommand
@@ -7,13 +14,6 @@ import org.openapitools.client.models.JournalEntryTransactionItem
 import org.openapitools.client.models.PostJournalEntriesResponse
 import org.openapitools.client.models.PostJournalEntriesTransactionIdRequest
 import org.openapitools.client.models.PostJournalEntriesTransactionIdResponse
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface JournalEntriesApi {
     /**
@@ -80,9 +80,9 @@ interface JournalEntriesApi {
     @Multipart
     @POST("v1/journalentries/uploadtemplate")
     suspend fun postJournalEntriesTemplate(
-        @Part("dateFormat") dateFormat: String? = null,
-        @Part("locale") locale: String? = null,
-        @Part uploadedInputStream: MultipartBody.Part? = null
+        @Part("dateFormat") dateFormat: String,
+        @Part("locale") locale: String,
+        @Part uploadedInputStream: MultipartBody.Part
     ): String
 
     /**
@@ -117,10 +117,10 @@ interface JournalEntriesApi {
         @Query("officeId") officeId: Long? = null,
         @Query("glAccountId") glAccountId: Long? = null,
         @Query("manualEntriesOnly") manualEntriesOnly: Boolean? = null,
-        @Query("fromDate") fromDate: Any? = null,
-        @Query("toDate") toDate: Any? = null,
-        @Query("submittedOnDateFrom") submittedOnDateFrom: Any? = null,
-        @Query("submittedOnDateTo") submittedOnDateTo: Any? = null,
+        @Query("fromDate") fromDate: String? = null,
+        @Query("toDate") toDate: String? = null,
+        @Query("submittedOnDateFrom") submittedOnDateFrom: String? = null,
+        @Query("submittedOnDateTo") submittedOnDateTo: String? = null,
         @Query("transactionId") transactionId: String? = null,
         @Query("entityType") entityType: Int? = null,
         @Query("offset") offset: Int? = null,
