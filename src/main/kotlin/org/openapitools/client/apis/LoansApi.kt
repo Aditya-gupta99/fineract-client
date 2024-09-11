@@ -1,5 +1,14 @@
 package org.openapitools.client.apis
 
+import de.jensklingenberg.ktorfit.http.Body
+import de.jensklingenberg.ktorfit.http.DELETE
+import de.jensklingenberg.ktorfit.http.GET
+import de.jensklingenberg.ktorfit.http.Multipart
+import de.jensklingenberg.ktorfit.http.POST
+import de.jensklingenberg.ktorfit.http.PUT
+import de.jensklingenberg.ktorfit.http.Part
+import de.jensklingenberg.ktorfit.http.Path
+import de.jensklingenberg.ktorfit.http.Query
 import okhttp3.MultipartBody
 import org.openapitools.client.models.DeleteLoansLoanIdResponse
 import org.openapitools.client.models.GetDelinquencyActionsResponse
@@ -16,15 +25,6 @@ import org.openapitools.client.models.PostLoansRequest
 import org.openapitools.client.models.PostLoansResponse
 import org.openapitools.client.models.PutLoansLoanIdRequest
 import org.openapitools.client.models.PutLoansLoanIdResponse
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Part
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface LoansApi {
     /**
@@ -261,9 +261,9 @@ interface LoansApi {
     @Multipart
     @POST("v1/loans/repayments/uploadtemplate")
     suspend fun postLoanRepaymentTemplate(
-        @Part("dateFormat") dateFormat: String? = null,
-        @Part("locale") locale: String? = null,
-        @Part uploadedInputStream: MultipartBody.Part? = null
+        @Part("dateFormat") dateFormat: String,
+        @Part("locale") locale: String,
+        @Part uploadedInputStream: MultipartBody.Part
     ): String
 
     /**
@@ -280,9 +280,9 @@ interface LoansApi {
     @Multipart
     @POST("v1/loans/uploadtemplate")
     suspend fun postLoanTemplate(
-        @Part("dateFormat") dateFormat: String? = null,
-        @Part("locale") locale: String? = null,
-        @Part uploadedInputStream: MultipartBody.Part? = null
+        @Part("dateFormat") dateFormat: String,
+        @Part("locale") locale: String,
+        @Part uploadedInputStream: MultipartBody.Part
     ): String
 
     /**

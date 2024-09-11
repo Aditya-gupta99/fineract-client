@@ -1,165 +1,173 @@
+@file:OptIn(InternalKtorfitApi::class)
+
 package org.openapitools.client.infrastructure
 
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level
-import org.openapitools.client.apis.AccountNumberFormatApi
-import org.openapitools.client.apis.AccountTransfersApi
-import org.openapitools.client.apis.AccountingClosureApi
-import org.openapitools.client.apis.AccountingRulesApi
-import org.openapitools.client.apis.AdhocQueryApiApi
-import org.openapitools.client.apis.AuditsApi
-import org.openapitools.client.apis.AuthenticationHTTPBasicApi
-import org.openapitools.client.apis.BatchAPIApi
-import org.openapitools.client.apis.BulkImportApi
-import org.openapitools.client.apis.BulkLoansApi
-import org.openapitools.client.apis.BusinessDateManagementApi
-import org.openapitools.client.apis.BusinessStepConfigurationApi
-import org.openapitools.client.apis.CacheApi
-import org.openapitools.client.apis.CalendarApi
-import org.openapitools.client.apis.CashierJournalsApi
-import org.openapitools.client.apis.CashiersApi
-import org.openapitools.client.apis.CentersApi
-import org.openapitools.client.apis.ChargesApi
-import org.openapitools.client.apis.ClientApi
-import org.openapitools.client.apis.ClientChargesApi
-import org.openapitools.client.apis.ClientCollateralManagementApi
-import org.openapitools.client.apis.ClientFamilyMemberApi
-import org.openapitools.client.apis.ClientIdentifierApi
-import org.openapitools.client.apis.ClientSearchV2Api
-import org.openapitools.client.apis.ClientTransactionApi
-import org.openapitools.client.apis.ClientsAddressApi
-import org.openapitools.client.apis.CodeValuesApi
-import org.openapitools.client.apis.CodesApi
-import org.openapitools.client.apis.CollateralManagementApi
-import org.openapitools.client.apis.CollectionSheetApi
-import org.openapitools.client.apis.CreditBureauConfigurationApi
-import org.openapitools.client.apis.CurrencyApi
-import org.openapitools.client.apis.DataTablesApi
-import org.openapitools.client.apis.DefaultApi
-import org.openapitools.client.apis.DelinquencyRangeAndBucketsManagementApi
-import org.openapitools.client.apis.DepositAccountOnHoldFundTransactionsApi
-import org.openapitools.client.apis.DeviceRegistrationApi
-import org.openapitools.client.apis.DocumentsApi
-import org.openapitools.client.apis.EntityDataTableApi
-import org.openapitools.client.apis.EntityFieldConfigurationApi
-import org.openapitools.client.apis.ExternalAssetOwnersApi
-import org.openapitools.client.apis.ExternalEventConfigurationApi
-import org.openapitools.client.apis.ExternalServicesApi
-import org.openapitools.client.apis.FetchAuthenticatedUserDetailsApi
-import org.openapitools.client.apis.FineractEntityApi
-import org.openapitools.client.apis.FixedDepositAccountApi
-import org.openapitools.client.apis.FixedDepositAccountTransactionsApi
-import org.openapitools.client.apis.FixedDepositProductApi
-import org.openapitools.client.apis.FloatingRatesApi
-import org.openapitools.client.apis.FundsApi
-import org.openapitools.client.apis.GeneralLedgerAccountApi
-import org.openapitools.client.apis.GlobalConfigurationApi
-import org.openapitools.client.apis.GroupsApi
-import org.openapitools.client.apis.GroupsLevelApi
-import org.openapitools.client.apis.GuarantorsApi
-import org.openapitools.client.apis.HolidaysApi
-import org.openapitools.client.apis.HooksApi
-import org.openapitools.client.apis.InlineJobApi
-import org.openapitools.client.apis.InstanceModeApi
-import org.openapitools.client.apis.InterOperationApi
-import org.openapitools.client.apis.InterestRateChartApi
-import org.openapitools.client.apis.InterestRateSlabAKAInterestBandsApi
-import org.openapitools.client.apis.JournalEntriesApi
-import org.openapitools.client.apis.LikelihoodApi
-import org.openapitools.client.apis.ListReportMailingJobHistoryApi
-import org.openapitools.client.apis.LoanAccountLockApi
-import org.openapitools.client.apis.LoanCOBCatchUpApi
-import org.openapitools.client.apis.LoanChargesApi
-import org.openapitools.client.apis.LoanCollateralApi
-import org.openapitools.client.apis.LoanCollateralManagementApi
-import org.openapitools.client.apis.LoanDisbursementDetailsApi
-import org.openapitools.client.apis.LoanProductsApi
-import org.openapitools.client.apis.LoanReschedulingApi
-import org.openapitools.client.apis.LoanTransactionsApi
-import org.openapitools.client.apis.LoansApi
-import org.openapitools.client.apis.MakerCheckerOr4EyeFunctionalityApi
-import org.openapitools.client.apis.MappingFinancialActivitiesToAccountsApi
-import org.openapitools.client.apis.MeetingsApi
-import org.openapitools.client.apis.MixMappingApi
-import org.openapitools.client.apis.MixReportApi
-import org.openapitools.client.apis.MixTaxonomyApi
-import org.openapitools.client.apis.NotesApi
-import org.openapitools.client.apis.NotificationApi
-import org.openapitools.client.apis.OfficesApi
-import org.openapitools.client.apis.PasswordPreferencesApi
-import org.openapitools.client.apis.PaymentTypeApi
-import org.openapitools.client.apis.PeriodicAccrualAccountingApi
-import org.openapitools.client.apis.PermissionsApi
-import org.openapitools.client.apis.PocketApi
-import org.openapitools.client.apis.PovertyLineApi
-import org.openapitools.client.apis.ProductMixApi
-import org.openapitools.client.apis.ProductsApi
-import org.openapitools.client.apis.ProvisioningCategoryApi
-import org.openapitools.client.apis.ProvisioningCriteriaApi
-import org.openapitools.client.apis.ProvisioningEntriesApi
-import org.openapitools.client.apis.RateApi
-import org.openapitools.client.apis.RecurringDepositAccountApi
-import org.openapitools.client.apis.RecurringDepositAccountTransactionsApi
-import org.openapitools.client.apis.RecurringDepositProductApi
-import org.openapitools.client.apis.RepaymentWithPostDatedChecksApi
-import org.openapitools.client.apis.ReportMailingJobsApi
-import org.openapitools.client.apis.ReportsApi
-import org.openapitools.client.apis.RescheduleLoansApi
-import org.openapitools.client.apis.RolesApi
-import org.openapitools.client.apis.RunReportsApi
-import org.openapitools.client.apis.SCHEDULERJOBApi
-import org.openapitools.client.apis.SMSApi
-import org.openapitools.client.apis.SPMAPILookUpTableApi
-import org.openapitools.client.apis.SavingsAccountApi
-import org.openapitools.client.apis.SavingsAccountTransactionsApi
-import org.openapitools.client.apis.SavingsChargesApi
-import org.openapitools.client.apis.SavingsProductApi
-import org.openapitools.client.apis.SchedulerApi
-import org.openapitools.client.apis.ScoreCardApi
-import org.openapitools.client.apis.SearchAPIApi
-import org.openapitools.client.apis.SelfAccountTransferApi
-import org.openapitools.client.apis.SelfAuthenticationApi
-import org.openapitools.client.apis.SelfClientApi
-import org.openapitools.client.apis.SelfDividendApi
-import org.openapitools.client.apis.SelfLoanProductsApi
-import org.openapitools.client.apis.SelfLoansApi
-import org.openapitools.client.apis.SelfRunReportApi
-import org.openapitools.client.apis.SelfSavingsAccountApi
-import org.openapitools.client.apis.SelfSavingsProductsApi
-import org.openapitools.client.apis.SelfScoreCardApi
-import org.openapitools.client.apis.SelfServiceRegistrationApi
-import org.openapitools.client.apis.SelfShareAccountsApi
-import org.openapitools.client.apis.SelfSpmApi
-import org.openapitools.client.apis.SelfThirdPartyTransferApi
-import org.openapitools.client.apis.SelfUserApi
-import org.openapitools.client.apis.SelfUserDetailsApi
-import org.openapitools.client.apis.ShareAccountApi
-import org.openapitools.client.apis.SpmSurveysApi
-import org.openapitools.client.apis.StaffApi
-import org.openapitools.client.apis.StandingInstructionsApi
-import org.openapitools.client.apis.StandingInstructionsHistoryApi
-import org.openapitools.client.apis.SurveyApi
-import org.openapitools.client.apis.TaxComponentsApi
-import org.openapitools.client.apis.TaxGroupApi
-import org.openapitools.client.apis.TellerCashManagementApi
-import org.openapitools.client.apis.TwoFactorApi
-import org.openapitools.client.apis.UserGeneratedDocumentsApi
-import org.openapitools.client.apis.UsersApi
-import org.openapitools.client.apis.WorkingDaysApi
-import org.openapitools.client.auth.ApiKeyAuth
-import org.openapitools.client.auth.HttpBasicAuth
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.internal.InternalKtorfitApi
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import io.ktor.client.plugins.auth.providers.basic
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.DEFAULT
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.headers
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+import org.openapitools.client.apis.createAccountNumberFormatApi
+import org.openapitools.client.apis.createAccountTransfersApi
+import org.openapitools.client.apis.createAccountingClosureApi
+import org.openapitools.client.apis.createAccountingRulesApi
+import org.openapitools.client.apis.createAdhocQueryApiApi
+import org.openapitools.client.apis.createAuditsApi
+import org.openapitools.client.apis.createAuthenticationHTTPBasicApi
+import org.openapitools.client.apis.createBatchAPIApi
+import org.openapitools.client.apis.createBulkImportApi
+import org.openapitools.client.apis.createBulkLoansApi
+import org.openapitools.client.apis.createBusinessDateManagementApi
+import org.openapitools.client.apis.createBusinessStepConfigurationApi
+import org.openapitools.client.apis.createCacheApi
+import org.openapitools.client.apis.createCalendarApi
+import org.openapitools.client.apis.createCashierJournalsApi
+import org.openapitools.client.apis.createCashiersApi
+import org.openapitools.client.apis.createCentersApi
+import org.openapitools.client.apis.createChargesApi
+import org.openapitools.client.apis.createClientApi
+import org.openapitools.client.apis.createClientChargesApi
+import org.openapitools.client.apis.createClientCollateralManagementApi
+import org.openapitools.client.apis.createClientFamilyMemberApi
+import org.openapitools.client.apis.createClientIdentifierApi
+import org.openapitools.client.apis.createClientSearchV2Api
+import org.openapitools.client.apis.createClientTransactionApi
+import org.openapitools.client.apis.createClientsAddressApi
+import org.openapitools.client.apis.createCodeValuesApi
+import org.openapitools.client.apis.createCodesApi
+import org.openapitools.client.apis.createCollateralManagementApi
+import org.openapitools.client.apis.createCollectionSheetApi
+import org.openapitools.client.apis.createCreditBureauConfigurationApi
+import org.openapitools.client.apis.createCurrencyApi
+import org.openapitools.client.apis.createDataTablesApi
+import org.openapitools.client.apis.createDefaultApi
+import org.openapitools.client.apis.createDelinquencyRangeAndBucketsManagementApi
+import org.openapitools.client.apis.createDepositAccountOnHoldFundTransactionsApi
+import org.openapitools.client.apis.createDeviceRegistrationApi
+import org.openapitools.client.apis.createDocumentsApi
+import org.openapitools.client.apis.createEntityDataTableApi
+import org.openapitools.client.apis.createEntityFieldConfigurationApi
+import org.openapitools.client.apis.createExternalAssetOwnersApi
+import org.openapitools.client.apis.createExternalEventConfigurationApi
+import org.openapitools.client.apis.createExternalServicesApi
+import org.openapitools.client.apis.createFetchAuthenticatedUserDetailsApi
+import org.openapitools.client.apis.createFineractEntityApi
+import org.openapitools.client.apis.createFixedDepositAccountApi
+import org.openapitools.client.apis.createFixedDepositAccountTransactionsApi
+import org.openapitools.client.apis.createFixedDepositProductApi
+import org.openapitools.client.apis.createFloatingRatesApi
+import org.openapitools.client.apis.createFundsApi
+import org.openapitools.client.apis.createGeneralLedgerAccountApi
+import org.openapitools.client.apis.createGlobalConfigurationApi
+import org.openapitools.client.apis.createGroupsApi
+import org.openapitools.client.apis.createGroupsLevelApi
+import org.openapitools.client.apis.createGuarantorsApi
+import org.openapitools.client.apis.createHolidaysApi
+import org.openapitools.client.apis.createHooksApi
+import org.openapitools.client.apis.createInlineJobApi
+import org.openapitools.client.apis.createInstanceModeApi
+import org.openapitools.client.apis.createInterOperationApi
+import org.openapitools.client.apis.createInterestRateChartApi
+import org.openapitools.client.apis.createInterestRateSlabAKAInterestBandsApi
+import org.openapitools.client.apis.createJournalEntriesApi
+import org.openapitools.client.apis.createLikelihoodApi
+import org.openapitools.client.apis.createListReportMailingJobHistoryApi
+import org.openapitools.client.apis.createLoanAccountLockApi
+import org.openapitools.client.apis.createLoanCOBCatchUpApi
+import org.openapitools.client.apis.createLoanChargesApi
+import org.openapitools.client.apis.createLoanCollateralApi
+import org.openapitools.client.apis.createLoanCollateralManagementApi
+import org.openapitools.client.apis.createLoanDisbursementDetailsApi
+import org.openapitools.client.apis.createLoanProductsApi
+import org.openapitools.client.apis.createLoanReschedulingApi
+import org.openapitools.client.apis.createLoanTransactionsApi
+import org.openapitools.client.apis.createLoansApi
+import org.openapitools.client.apis.createMakerCheckerOr4EyeFunctionalityApi
+import org.openapitools.client.apis.createMappingFinancialActivitiesToAccountsApi
+import org.openapitools.client.apis.createMeetingsApi
+import org.openapitools.client.apis.createMixMappingApi
+import org.openapitools.client.apis.createMixReportApi
+import org.openapitools.client.apis.createMixTaxonomyApi
+import org.openapitools.client.apis.createNotesApi
+import org.openapitools.client.apis.createNotificationApi
+import org.openapitools.client.apis.createOfficesApi
+import org.openapitools.client.apis.createPasswordPreferencesApi
+import org.openapitools.client.apis.createPaymentTypeApi
+import org.openapitools.client.apis.createPeriodicAccrualAccountingApi
+import org.openapitools.client.apis.createPermissionsApi
+import org.openapitools.client.apis.createPocketApi
+import org.openapitools.client.apis.createPovertyLineApi
+import org.openapitools.client.apis.createProductMixApi
+import org.openapitools.client.apis.createProductsApi
+import org.openapitools.client.apis.createProvisioningCategoryApi
+import org.openapitools.client.apis.createProvisioningCriteriaApi
+import org.openapitools.client.apis.createProvisioningEntriesApi
+import org.openapitools.client.apis.createRateApi
+import org.openapitools.client.apis.createRecurringDepositAccountApi
+import org.openapitools.client.apis.createRecurringDepositAccountTransactionsApi
+import org.openapitools.client.apis.createRecurringDepositProductApi
+import org.openapitools.client.apis.createRepaymentWithPostDatedChecksApi
+import org.openapitools.client.apis.createReportMailingJobsApi
+import org.openapitools.client.apis.createReportsApi
+import org.openapitools.client.apis.createRescheduleLoansApi
+import org.openapitools.client.apis.createRolesApi
+import org.openapitools.client.apis.createRunReportsApi
+import org.openapitools.client.apis.createSCHEDULERJOBApi
+import org.openapitools.client.apis.createSMSApi
+import org.openapitools.client.apis.createSPMAPILookUpTableApi
+import org.openapitools.client.apis.createSavingsAccountApi
+import org.openapitools.client.apis.createSavingsAccountTransactionsApi
+import org.openapitools.client.apis.createSavingsChargesApi
+import org.openapitools.client.apis.createSavingsProductApi
+import org.openapitools.client.apis.createSchedulerApi
+import org.openapitools.client.apis.createScoreCardApi
+import org.openapitools.client.apis.createSearchAPIApi
+import org.openapitools.client.apis.createSelfAccountTransferApi
+import org.openapitools.client.apis.createSelfAuthenticationApi
+import org.openapitools.client.apis.createSelfClientApi
+import org.openapitools.client.apis.createSelfDividendApi
+import org.openapitools.client.apis.createSelfLoanProductsApi
+import org.openapitools.client.apis.createSelfLoansApi
+import org.openapitools.client.apis.createSelfRunReportApi
+import org.openapitools.client.apis.createSelfSavingsAccountApi
+import org.openapitools.client.apis.createSelfSavingsProductsApi
+import org.openapitools.client.apis.createSelfScoreCardApi
+import org.openapitools.client.apis.createSelfServiceRegistrationApi
+import org.openapitools.client.apis.createSelfShareAccountsApi
+import org.openapitools.client.apis.createSelfSpmApi
+import org.openapitools.client.apis.createSelfThirdPartyTransferApi
+import org.openapitools.client.apis.createSelfUserApi
+import org.openapitools.client.apis.createSelfUserDetailsApi
+import org.openapitools.client.apis.createShareAccountApi
+import org.openapitools.client.apis.createSpmSurveysApi
+import org.openapitools.client.apis.createStaffApi
+import org.openapitools.client.apis.createStandingInstructionsApi
+import org.openapitools.client.apis.createStandingInstructionsHistoryApi
+import org.openapitools.client.apis.createSurveyApi
+import org.openapitools.client.apis.createTaxComponentsApi
+import org.openapitools.client.apis.createTaxGroupApi
+import org.openapitools.client.apis.createTellerCashManagementApi
+import org.openapitools.client.apis.createTwoFactorApi
+import org.openapitools.client.apis.createUserGeneratedDocumentsApi
+import org.openapitools.client.apis.createUsersApi
+import org.openapitools.client.apis.createWorkingDaysApi
 import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.security.KeyManagementException
 import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
-import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
-import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
-import javax.net.ssl.SSLSession
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
@@ -170,206 +178,162 @@ import javax.net.ssl.X509TrustManager
  */
 
 class FineractClient private constructor(
-    private val okHttpClient: OkHttpClient,
-    private val retrofit: Retrofit
+    private val httpClient: HttpClient,
+    private val ktorfit: Ktorfit
 ) {
-    val accountingClosures: AccountingClosureApi = retrofit.create(AccountingClosureApi::class.java)
-    val accountingRules: AccountingRulesApi = retrofit.create(AccountingRulesApi::class.java)
-    val accountNumberFormats: AccountNumberFormatApi =
-        retrofit.create(AccountNumberFormatApi::class.java)
-    val accountTransfers: AccountTransfersApi = retrofit.create(AccountTransfersApi::class.java)
-    val adhocQuery: AdhocQueryApiApi = retrofit.create(AdhocQueryApiApi::class.java)
-    val audits: AuditsApi = retrofit.create(AuditsApi::class.java)
-    val authentication: AuthenticationHTTPBasicApi =
-        retrofit.create(AuthenticationHTTPBasicApi::class.java)
-    val batches: BatchAPIApi = retrofit.create(BatchAPIApi::class.java)
-    val bulkImport: BulkImportApi = retrofit.create(BulkImportApi::class.java)
-    val bulkLoans: BulkLoansApi = retrofit.create(BulkLoansApi::class.java)
-    val businessDateManagement: BusinessDateManagementApi =
-        retrofit.create(BusinessDateManagementApi::class.java)
-    val businessStepConfiguration: BusinessStepConfigurationApi =
-        retrofit.create(BusinessStepConfigurationApi::class.java)
-    val caches: CacheApi = retrofit.create(CacheApi::class.java)
-    val calender: CalendarApi = retrofit.create(CalendarApi::class.java)
-    val cashiersJournal: CashierJournalsApi = retrofit.create(CashierJournalsApi::class.java)
-    val cashiers: CashiersApi = retrofit.create(CashiersApi::class.java)
-    val centers: CentersApi = retrofit.create(CentersApi::class.java)
-    val charges: ChargesApi = retrofit.create(ChargesApi::class.java)
-    val clients: ClientApi = retrofit.create(ClientApi::class.java)
-    val clientCharges: ClientChargesApi = retrofit.create(ClientChargesApi::class.java)
-    val clientCollateralManagement: ClientCollateralManagementApi =
-        retrofit.create(ClientCollateralManagementApi::class.java)
-    val clientFamilyMember: ClientFamilyMemberApi =
-        retrofit.create(ClientFamilyMemberApi::class.java)
-    val clientIdentifiers: ClientIdentifierApi = retrofit.create(ClientIdentifierApi::class.java)
-    val clientAddresses: ClientsAddressApi = retrofit.create(ClientsAddressApi::class.java)
-    val clientSearch: ClientSearchV2Api = retrofit.create(ClientSearchV2Api::class.java)
-    val clientTransactions: ClientTransactionApi = retrofit.create(ClientTransactionApi::class.java)
-    val codes: CodesApi = retrofit.create(CodesApi::class.java)
-    val codeValues: CodeValuesApi = retrofit.create(CodeValuesApi::class.java)
-    val collateralManagement: CollateralManagementApi =
-        retrofit.create(CollateralManagementApi::class.java)
-    val collectionSheet: CollectionSheetApi = retrofit.create(CollectionSheetApi::class.java)
-    val creditBureauConfiguration: CreditBureauConfigurationApi =
-        retrofit.create(CreditBureauConfigurationApi::class.java)
-    val currencies: CurrencyApi = retrofit.create(CurrencyApi::class.java)
-    val dataTables: DataTablesApi = retrofit.create(DataTablesApi::class.java)
-    val legacy: DefaultApi = retrofit.create(DefaultApi::class.java) // TODO FINERACT-1222
-    val delinquencyRangeAndBucketsManagement: DelinquencyRangeAndBucketsManagementApi =
-        retrofit.create(DelinquencyRangeAndBucketsManagementApi::class.java)
-    val depositAccountOnHoldFundTransactions: DepositAccountOnHoldFundTransactionsApi =
-        retrofit.create(DepositAccountOnHoldFundTransactionsApi::class.java)
-    val deviceRegistrationApi: DeviceRegistrationApi =
-        retrofit.create(DeviceRegistrationApi::class.java)
-    val documents: DocumentsApi = retrofit.create(DocumentsApi::class.java)
-    val entityDatatableChecks: EntityDataTableApi = retrofit.create(EntityDataTableApi::class.java)
-    val entityFieldConfigurations: EntityFieldConfigurationApi =
-        retrofit.create(EntityFieldConfigurationApi::class.java)
-    val externalAssetOwners: ExternalAssetOwnersApi =
-        retrofit.create(ExternalAssetOwnersApi::class.java)
-    val externalEventConfiguration: ExternalEventConfigurationApi =
-        retrofit.create(ExternalEventConfigurationApi::class.java)
-    val externalServices: ExternalServicesApi = retrofit.create(ExternalServicesApi::class.java)
-    val userDetails: FetchAuthenticatedUserDetailsApi =
-        retrofit.create(FetchAuthenticatedUserDetailsApi::class.java)
-    val fineractEntity: FineractEntityApi = retrofit.create(FineractEntityApi::class.java)
-    val fixedDepositAccounts: FixedDepositAccountApi =
-        retrofit.create(FixedDepositAccountApi::class.java)
-    val fixedDepositAccountTransactions: FixedDepositAccountTransactionsApi =
-        retrofit.create(FixedDepositAccountTransactionsApi::class.java)
-    val fixedDepositProducts: FixedDepositProductApi =
-        retrofit.create(FixedDepositProductApi::class.java)
-    val floatingRates: FloatingRatesApi = retrofit.create(FloatingRatesApi::class.java)
-    val funds: FundsApi = retrofit.create(FundsApi::class.java)
-    val glAccounts: GeneralLedgerAccountApi = retrofit.create(GeneralLedgerAccountApi::class.java)
-    val globalConfigurations: GlobalConfigurationApi =
-        retrofit.create(GlobalConfigurationApi::class.java)
-    val groups: GroupsApi = retrofit.create(GroupsApi::class.java)
-    val groupsLoans: GroupsLevelApi = retrofit.create(GroupsLevelApi::class.java)
-    val guarantors: GuarantorsApi = retrofit.create(GuarantorsApi::class.java)
-    val holidays: HolidaysApi = retrofit.create(HolidaysApi::class.java)
-    val hooks: HooksApi = retrofit.create(HooksApi::class.java)
-    val inlineJob: InlineJobApi = retrofit.create(InlineJobApi::class.java)
-    val instanceMode: InstanceModeApi = retrofit.create(InstanceModeApi::class.java)
-    val interestRateCharts: InterestRateChartApi = retrofit.create(InterestRateChartApi::class.java)
-    val interestRateChartLabs: InterestRateSlabAKAInterestBandsApi =
-        retrofit.create(InterestRateSlabAKAInterestBandsApi::class.java)
-    val interOperation: InterOperationApi = retrofit.create(InterOperationApi::class.java)
-    val journalEntries: JournalEntriesApi = retrofit.create(JournalEntriesApi::class.java)
-    val likelihood: LikelihoodApi = retrofit.create(LikelihoodApi::class.java)
-    val reportMailings: ListReportMailingJobHistoryApi =
-        retrofit.create(ListReportMailingJobHistoryApi::class.java)
-    val loanAccountLock: LoanAccountLockApi = retrofit.create(LoanAccountLockApi::class.java)
-    val loanCharges: LoanChargesApi = retrofit.create(LoanChargesApi::class.java)
-    val loanCOBCatchUp: LoanCOBCatchUpApi = retrofit.create(LoanCOBCatchUpApi::class.java)
-    val loanCollaterals: LoanCollateralApi = retrofit.create(LoanCollateralApi::class.java)
-    val loanCollateralManagement: LoanCollateralManagementApi =
-        retrofit.create(LoanCollateralManagementApi::class.java)
-    val loanDisbursementDetails: LoanDisbursementDetailsApi =
-        retrofit.create(LoanDisbursementDetailsApi::class.java)
-    val loanProducts: LoanProductsApi = retrofit.create(LoanProductsApi::class.java)
-    val loanSchedules: LoanReschedulingApi = retrofit.create(LoanReschedulingApi::class.java)
-    val loans: LoansApi = retrofit.create(LoansApi::class.java)
-    val loanTransactions: LoanTransactionsApi = retrofit.create(LoanTransactionsApi::class.java)
-    val makerCheckers: MakerCheckerOr4EyeFunctionalityApi =
-        retrofit.create(MakerCheckerOr4EyeFunctionalityApi::class.java)
-    val financialActivityAccountMappings: MappingFinancialActivitiesToAccountsApi =
-        retrofit.create(MappingFinancialActivitiesToAccountsApi::class.java)
-    val meetings: MeetingsApi = retrofit.create(MeetingsApi::class.java)
-    val mixMappings: MixMappingApi = retrofit.create(MixMappingApi::class.java)
-    val mixReports: MixReportApi = retrofit.create(MixReportApi::class.java)
-    val mixTaxonomies: MixTaxonomyApi = retrofit.create(MixTaxonomyApi::class.java)
-    val notes: NotesApi = retrofit.create(NotesApi::class.java)
-    val notifications: NotificationApi = retrofit.create(NotificationApi::class.java)
-    val offices: OfficesApi = retrofit.create(OfficesApi::class.java)
-    val passwordPreferences: PasswordPreferencesApi =
-        retrofit.create(PasswordPreferencesApi::class.java)
-    val paymentTypes: PaymentTypeApi = retrofit.create(PaymentTypeApi::class.java)
-    val periodicAccrualAccounting: PeriodicAccrualAccountingApi =
-        retrofit.create(PeriodicAccrualAccountingApi::class.java)
-    val permissions: PermissionsApi = retrofit.create(PermissionsApi::class.java)
-    val selfPockets: PocketApi = retrofit.create(PocketApi::class.java)
-    val povertyLine: PovertyLineApi = retrofit.create(PovertyLineApi::class.java)
-    val productMix: ProductMixApi = retrofit.create(ProductMixApi::class.java)
-    val products: ProductsApi = retrofit.create(ProductsApi::class.java)
-    val provisioningCategories: ProvisioningCategoryApi =
-        retrofit.create(ProvisioningCategoryApi::class.java)
-    val provisioningCriterias: ProvisioningCriteriaApi =
-        retrofit.create(ProvisioningCriteriaApi::class.java)
-    val provisioningEntries: ProvisioningEntriesApi =
-        retrofit.create(ProvisioningEntriesApi::class.java)
-    val rate: RateApi = retrofit.create(RateApi::class.java)
-    val recurringDepositAccounts: RecurringDepositAccountApi =
-        retrofit.create(RecurringDepositAccountApi::class.java)
-    val recurringDepositAccountTransactions: RecurringDepositAccountTransactionsApi =
-        retrofit.create(RecurringDepositAccountTransactionsApi::class.java)
-    val recurringDepositProducts: RecurringDepositProductApi =
-        retrofit.create(RecurringDepositProductApi::class.java)
-    val repaymentWithPostDatedChecks: RepaymentWithPostDatedChecksApi =
-        retrofit.create(RepaymentWithPostDatedChecksApi::class.java)
-    val reportMailingJobs: ReportMailingJobsApi = retrofit.create(ReportMailingJobsApi::class.java)
-    val reports: ReportsApi = retrofit.create(ReportsApi::class.java)
-    val rescheduling: RescheduleLoansApi = retrofit.create(RescheduleLoansApi::class.java)
-    val roles: RolesApi = retrofit.create(RolesApi::class.java)
-    val reportsRun: RunReportsApi = retrofit.create(RunReportsApi::class.java)
-    val savingsAccounts: SavingsAccountApi = retrofit.create(SavingsAccountApi::class.java)
-    val savingsTransactions: SavingsAccountTransactionsApi =
-        retrofit.create(SavingsAccountTransactionsApi::class.java)
-    val savingsAccountCharges: SavingsChargesApi = retrofit.create(SavingsChargesApi::class.java)
-    val savingsProducts: SavingsProductApi = retrofit.create(SavingsProductApi::class.java)
-    val jobsScheduler: SchedulerApi = retrofit.create(SchedulerApi::class.java)
-    val jobs: SCHEDULERJOBApi = retrofit.create(SCHEDULERJOBApi::class.java)
-    val surveyScorecards: ScoreCardApi = retrofit.create(ScoreCardApi::class.java)
-    val search: SearchAPIApi = retrofit.create(SearchAPIApi::class.java)
-    val selfAccountTransfers: SelfAccountTransferApi =
-        retrofit.create(SelfAccountTransferApi::class.java)
-    val selfAuthentication: SelfAuthenticationApi =
-        retrofit.create(SelfAuthenticationApi::class.java)
-    val selfClients: SelfClientApi = retrofit.create(SelfClientApi::class.java)
-    val selfDividend: SelfDividendApi = retrofit.create(SelfDividendApi::class.java)
-    val selfLoanProducts: SelfLoanProductsApi = retrofit.create(SelfLoanProductsApi::class.java)
-    val selfLoans: SelfLoansApi = retrofit.create(SelfLoansApi::class.java)
-    val selfReportsRun: SelfRunReportApi = retrofit.create(SelfRunReportApi::class.java)
-    val selfSavingsAccounts: SelfSavingsAccountApi =
-        retrofit.create(SelfSavingsAccountApi::class.java)
-    val selfSavingsProducts: SelfSavingsProductsApi =
-        retrofit.create(SelfSavingsProductsApi::class.java)
-    val selfSurveyScorecards: SelfScoreCardApi = retrofit.create(SelfScoreCardApi::class.java)
-    val selfRegistration: SelfServiceRegistrationApi =
-        retrofit.create(SelfServiceRegistrationApi::class.java)
-    val selfShareAccounts: SelfShareAccountsApi = retrofit.create(SelfShareAccountsApi::class.java)
-    val selfShareProducts: SelfSavingsProductsApi =
-        retrofit.create(SelfSavingsProductsApi::class.java)
-    val selfSurveys: SelfSpmApi = retrofit.create(SelfSpmApi::class.java)
-    val selfThirdPartyBeneficiaries: SelfThirdPartyTransferApi =
-        retrofit.create(SelfThirdPartyTransferApi::class.java)
-    val selfUser: SelfUserApi = retrofit.create(SelfUserApi::class.java)
-    val selfUserDetails: SelfUserDetailsApi = retrofit.create(SelfUserDetailsApi::class.java)
-    val shareAccounts: ShareAccountApi = retrofit.create(ShareAccountApi::class.java)
-    val sms: SMSApi = retrofit.create(SMSApi::class.java)
-    val surveyLookupTables: SPMAPILookUpTableApi = retrofit.create(SPMAPILookUpTableApi::class.java)
-    val spmSurveys: SpmSurveysApi = retrofit.create(SpmSurveysApi::class.java)
-    val staff: StaffApi = retrofit.create(StaffApi::class.java)
-    val standingInstructions: StandingInstructionsApi =
-        retrofit.create(StandingInstructionsApi::class.java)
-    val standingInstructionsHistory: StandingInstructionsHistoryApi =
-        retrofit.create(StandingInstructionsHistoryApi::class.java)
-    val surveys: SurveyApi = retrofit.create(SurveyApi::class.java)
-    val taxComponents: TaxComponentsApi = retrofit.create(TaxComponentsApi::class.java)
-    val taxGroups: TaxGroupApi = retrofit.create(TaxGroupApi::class.java)
-    val tellers: TellerCashManagementApi = retrofit.create(TellerCashManagementApi::class.java)
-    val twoFactor: TwoFactorApi = retrofit.create(TwoFactorApi::class.java)
-    val templates: UserGeneratedDocumentsApi =
-        retrofit.create(UserGeneratedDocumentsApi::class.java)
-    val users: UsersApi = retrofit.create(UsersApi::class.java)
-    val workingDays: WorkingDaysApi = retrofit.create(WorkingDaysApi::class.java)
+    val accountingClosures = ktorfit.createAccountingClosureApi()
+    val accountingRules = ktorfit.createAccountingRulesApi()
+    val accountNumberFormats = ktorfit.createAccountNumberFormatApi()
+    val accountTransfers = ktorfit.createAccountTransfersApi()
+    val adhocQuery = ktorfit.createAdhocQueryApiApi()
+    val audits = ktorfit.createAuditsApi()
+    val authentication = ktorfit.createAuthenticationHTTPBasicApi()
+    val batches = ktorfit.createBatchAPIApi()
+    val bulkImport = ktorfit.createBulkImportApi()
+    val bulkLoans = ktorfit.createBulkLoansApi()
+    val businessDateManagement = ktorfit.createBusinessDateManagementApi()
+    val businessStepConfiguration = ktorfit.createBusinessStepConfigurationApi()
+    val caches = ktorfit.createCacheApi()
+    val calender = ktorfit.createCalendarApi()
+    val cashiersJournal = ktorfit.createCashierJournalsApi()
+    val cashiers = ktorfit.createCashiersApi()
+    val centers = ktorfit.createCentersApi()
+    val charges = ktorfit.createChargesApi()
+    val clients = ktorfit.createClientApi()
+    val clientCharges = ktorfit.createClientChargesApi()
+    val clientCollateralManagement = ktorfit.createClientCollateralManagementApi()
+    val clientFamilyMember = ktorfit.createClientFamilyMemberApi()
+    val clientIdentifiers = ktorfit.createClientIdentifierApi()
+    val clientAddresses = ktorfit.createClientsAddressApi()
+    val clientSearch = ktorfit.createClientSearchV2Api()
+    val clientTransactions = ktorfit.createClientTransactionApi()
+    val codes = ktorfit.createCodesApi()
+    val codeValues = ktorfit.createCodeValuesApi()
+    val collateralManagement = ktorfit.createCollateralManagementApi()
+    val collectionSheet = ktorfit.createCollectionSheetApi()
+    val creditBureauConfiguration = ktorfit.createCreditBureauConfigurationApi()
+    val currencies = ktorfit.createCurrencyApi()
+    val dataTables = ktorfit.createDataTablesApi()
+    val legacy = ktorfit.createDefaultApi() // TODO FINERACT-1222
+    val delinquencyRangeAndBucketsManagement =
+        ktorfit.createDelinquencyRangeAndBucketsManagementApi()
+    val depositAccountOnHoldFundTransactions =
+        ktorfit.createDepositAccountOnHoldFundTransactionsApi()
+    val deviceRegistrationApi = ktorfit.createDeviceRegistrationApi()
+    val documents = ktorfit.createDocumentsApi()
+    val entityDatatableChecks = ktorfit.createEntityDataTableApi()
+    val entityFieldConfigurations = ktorfit.createEntityFieldConfigurationApi()
+    val externalAssetOwners = ktorfit.createExternalAssetOwnersApi()
+    val externalEventConfiguration = ktorfit.createExternalEventConfigurationApi()
+    val externalServices = ktorfit.createExternalServicesApi()
+    val userDetails = ktorfit.createFetchAuthenticatedUserDetailsApi()
+    val fineractEntity = ktorfit.createFineractEntityApi()
+    val fixedDepositAccounts = ktorfit.createFixedDepositAccountApi()
+    val fixedDepositAccountTransactions = ktorfit.createFixedDepositAccountTransactionsApi()
+    val fixedDepositProducts = ktorfit.createFixedDepositProductApi()
+    val floatingRates = ktorfit.createFloatingRatesApi()
+    val funds = ktorfit.createFundsApi()
+    val glAccounts = ktorfit.createGeneralLedgerAccountApi()
+    val globalConfigurations = ktorfit.createGlobalConfigurationApi()
+    val groups = ktorfit.createGroupsApi()
+    val groupsLoans = ktorfit.createGroupsLevelApi()
+    val guarantors = ktorfit.createGuarantorsApi()
+    val holidays = ktorfit.createHolidaysApi()
+    val hooks = ktorfit.createHooksApi()
+    val inlineJob = ktorfit.createInlineJobApi()
+    val instanceMode = ktorfit.createInstanceModeApi()
+    val interestRateCharts = ktorfit.createInterestRateChartApi()
+    val interestRateChartLabs = ktorfit.createInterestRateSlabAKAInterestBandsApi()
+    val interOperation = ktorfit.createInterOperationApi()
+    val journalEntries = ktorfit.createJournalEntriesApi()
+    val likelihood = ktorfit.createLikelihoodApi()
+    val reportMailings = ktorfit.createListReportMailingJobHistoryApi()
+    val loanAccountLock = ktorfit.createLoanAccountLockApi()
+    val loanCharges = ktorfit.createLoanChargesApi()
+    val loanCOBCatchUp = ktorfit.createLoanCOBCatchUpApi()
+    val loanCollaterals = ktorfit.createLoanCollateralApi()
+    val loanCollateralManagement = ktorfit.createLoanCollateralManagementApi()
+    val loanDisbursementDetails = ktorfit.createLoanDisbursementDetailsApi()
+    val loanProducts = ktorfit.createLoanProductsApi()
+    val loanSchedules = ktorfit.createLoanReschedulingApi()
+    val loans = ktorfit.createLoansApi()
+    val loanTransactions = ktorfit.createLoanTransactionsApi()
+    val makerCheckers = ktorfit.createMakerCheckerOr4EyeFunctionalityApi()
+    val financialActivityAccountMappings = ktorfit.createMappingFinancialActivitiesToAccountsApi()
+    val meetings = ktorfit.createMeetingsApi()
+    val mixMappings = ktorfit.createMixMappingApi()
+    val mixReports = ktorfit.createMixReportApi()
+    val mixTaxonomies = ktorfit.createMixTaxonomyApi()
+    val notes = ktorfit.createNotesApi()
+    val notifications = ktorfit.createNotificationApi()
+    val offices = ktorfit.createOfficesApi()
+    val passwordPreferences = ktorfit.createPasswordPreferencesApi()
+    val paymentTypes = ktorfit.createPaymentTypeApi()
+    val periodicAccrualAccounting = ktorfit.createPeriodicAccrualAccountingApi()
+    val permissions = ktorfit.createPermissionsApi()
+    val selfPockets = ktorfit.createPocketApi()
+    val povertyLine = ktorfit.createPovertyLineApi()
+    val productMix = ktorfit.createProductMixApi()
+    val provisioningCategories = ktorfit.createProvisioningCategoryApi()
+    val products = ktorfit.createProductsApi()
+    val provisioningCriterias = ktorfit.createProvisioningCriteriaApi()
+    val provisioningEntries = ktorfit.createProvisioningEntriesApi()
+    val rate = ktorfit.createRateApi()
+    val recurringDepositAccounts = ktorfit.createRecurringDepositAccountApi()
+    val recurringDepositAccountTransactions = ktorfit.createRecurringDepositAccountTransactionsApi()
+    val recurringDepositProducts = ktorfit.createRecurringDepositProductApi()
+    val repaymentWithPostDatedChecks = ktorfit.createRepaymentWithPostDatedChecksApi()
+    val reportMailingJobs = ktorfit.createReportMailingJobsApi()
+    val reports = ktorfit.createReportsApi()
+    val rescheduling = ktorfit.createRescheduleLoansApi()
+    val roles = ktorfit.createRolesApi()
+    val reportsRun = ktorfit.createRunReportsApi()
+    val savingsAccounts = ktorfit.createSavingsAccountApi()
+    val savingsTransactions = ktorfit.createSavingsAccountTransactionsApi()
+    val savingsAccountCharges = ktorfit.createSavingsChargesApi()
+    val savingsProducts = ktorfit.createSavingsProductApi()
+    val jobsScheduler = ktorfit.createSchedulerApi()
+    val jobs = ktorfit.createSCHEDULERJOBApi()
+    val surveyScorecards = ktorfit.createScoreCardApi()
+    val search = ktorfit.createSearchAPIApi()
+    val selfAccountTransfers = ktorfit.createSelfAccountTransferApi()
+    val selfAuthentication = ktorfit.createSelfAuthenticationApi()
+    val selfClients = ktorfit.createSelfClientApi()
+    val selfDividend = ktorfit.createSelfDividendApi()
+    val selfLoanProducts = ktorfit.createSelfLoanProductsApi()
+    val selfLoans = ktorfit.createSelfLoansApi()
+    val selfReportsRun = ktorfit.createSelfRunReportApi()
+    val selfSavingsAccounts = ktorfit.createSelfSavingsAccountApi()
+    val selfSavingsProducts = ktorfit.createSelfSavingsProductsApi()
+    val selfSurveyScorecards = ktorfit.createSelfScoreCardApi()
+    val selfRegistration = ktorfit.createSelfServiceRegistrationApi()
+    val selfShareAccounts = ktorfit.createSelfShareAccountsApi()
+    val selfSurveys = ktorfit.createSelfSpmApi()
+    val selfThirdPartyBeneficiaries = ktorfit.createSelfThirdPartyTransferApi()
+    val selfUser = ktorfit.createSelfUserApi()
+    val selfUserDetails = ktorfit.createSelfUserDetailsApi()
+    val shareAccounts = ktorfit.createShareAccountApi()
+    val sms = ktorfit.createSMSApi()
+    val surveyLookupTables = ktorfit.createSPMAPILookUpTableApi()
+    val spmSurveys = ktorfit.createSpmSurveysApi()
+    val staff = ktorfit.createStaffApi()
+    val standingInstructions = ktorfit.createStandingInstructionsApi()
+    val standingInstructionsHistory = ktorfit.createStandingInstructionsHistoryApi()
+    val surveys = ktorfit.createSurveyApi()
+    val taxComponents = ktorfit.createTaxComponentsApi()
+    val taxGroups = ktorfit.createTaxGroupApi()
+    val tellers = ktorfit.createTellerCashManagementApi()
+    val twoFactor = ktorfit.createTwoFactorApi()
+    val templates = ktorfit.createUserGeneratedDocumentsApi()
+    val users = ktorfit.createUsersApi()
+    val workingDays = ktorfit.createWorkingDaysApi()
 
-    fun okHttpClient(): OkHttpClient {
-        return this.okHttpClient
+    fun httpClient(): HttpClient {
+        return this.httpClient
     }
 
-    fun baseURL(): HttpUrl {
-        return retrofit.baseUrl()
+    fun baseURL(): String {
+        return ktorfit.baseUrl
     }
 
     /**
@@ -378,12 +342,12 @@ class FineractClient private constructor(
      * can be a handy back door for non-trivial advanced customizations of the API client if you have extended Fineract
      * with your own REST APIs.
      */
-    fun <S> createService(serviceClass: Class<S>?): S {
-        return retrofit.create(serviceClass)
-    }
+//    fun <S> createService(serviceClass: Class<S>?): S {
+//        return ktorfit.create(serviceClass)
+//    }
 
     class Builder internal constructor() {
-        private val json: JSON = JSON()
+//        private val json: JSON = JSON()
 
         /**
          * Obtain the internal OkHttp Builder. This method is typically not required to be invoked for simple API
@@ -391,7 +355,9 @@ class FineractClient private constructor(
          *
          * @return the [ApiClient] which [.build] will use.
          */
-        val okBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
+//        private val json = Json
+
+//        val okBuilder: OkHttpClient.Builder = OkHttpClient.Builder()
 
         /**
          * Obtain the internal Retrofit Builder. This method is typically not required to be invoked for simple API
@@ -399,16 +365,17 @@ class FineractClient private constructor(
          *
          * @return the [ApiClient] which [.build] will use.
          */
-        val retrofitBuilder: Retrofit.Builder =
-            Retrofit.Builder().addConverterFactory(ScalarsConverterFactory.create())
-                .addConverterFactory(JSON.GsonCustomConverterFactory.create(json.gson))
+//        val retrofitBuilder: Retrofit.Builder =
+//            Retrofit.Builder().addConverterFactory(ScalarsConverterFactory.create())
+//                .addConverterFactory(JSON.GsonCustomConverterFactory.create(json.gson))
 
-        private var baseURL: String? = null
+        private lateinit var baseURL: String
         private var tenant: String? = null
-        private var username: String? = null
-        private var password: String? = null
+        private var loginUsername: String? = null
+        private var loginPassword: String? = null
+        private var insecure: Boolean = false
 
-        fun baseURL(baseURL: String?): Builder {
+        fun baseURL(baseURL: String): Builder {
             this.baseURL = baseURL
             return this
         }
@@ -419,17 +386,22 @@ class FineractClient private constructor(
         }
 
         fun basicAuth(username: String?, password: String?): Builder {
-            this.username = username
-            this.password = password
+            this.loginUsername = username
+            this.loginPassword = password
             return this
         }
 
-        fun logging(level: Level?): Builder {
-            val logging = HttpLoggingInterceptor()
-            level?.let { logging.setLevel(it) }
-            okBuilder.addInterceptor(logging)
+        fun inSecure(insecure: Boolean): Builder {
+            this.insecure = insecure
             return this
         }
+
+//        fun logging(level: Level?): Builder {
+//            val logging = HttpLoggingInterceptor()
+//            level?.let { logging.setLevel(it) }
+//            okBuilder.addInterceptor(logging)
+//            return this
+//        }
 
         /**
          * Skip Fineract API host SSL certificate verification. DO NOT USE THIS when invoking a production server's API!
@@ -437,73 +409,151 @@ class FineractClient private constructor(
          * only. If you do not understand what this is, do not use it. You WILL cause a security issue in your
          * application due to the possibility of a "man in the middle" attack when this is enabled.
          */
-        @Suppress("unused")
-        fun insecure(insecure: Boolean): Builder {
-            // Nota bene: Similar code to this is also in Fineract Provider's
-            // org.apache.fineract.infrastructure.hooks.processor.ProcessorHelper
-            if (insecure) {
-                val insecureHostnameVerifier =
-                    HostnameVerifier { hostname: String?, session: SSLSession? -> true }
-                okBuilder.hostnameVerifier(insecureHostnameVerifier)
-
-                try {
-                    val insecureX509TrustManager: X509TrustManager = object : X509TrustManager {
-                        @Throws(CertificateException::class)
-                        override fun checkClientTrusted(
-                            chain: Array<X509Certificate>,
-                            authType: String
-                        ) {
-                        }
-
-                        @Throws(CertificateException::class)
-                        override fun checkServerTrusted(
-                            chain: Array<X509Certificate>,
-                            authType: String
-                        ) {
-                        }
-
-                        override fun getAcceptedIssuers(): Array<X509Certificate> {
-                            return arrayOf()
-                        }
-                    }
-
-                    // TODO "SSL" or "TLS" as in hooks.processor.ProcessorHelper?
-                    val sslContext = SSLContext.getInstance("SSL")
-                    sslContext.init(
-                        null,
-                        arrayOf<TrustManager>(insecureX509TrustManager),
-                        SecureRandom()
-                    )
-                    val insecureSslSocketFactory = sslContext.socketFactory
-
-                    okBuilder.sslSocketFactory(insecureSslSocketFactory, insecureX509TrustManager)
-                } catch (e: NoSuchAlgorithmException) {
-                    throw IllegalStateException("insecure() SSL configuration failed", e)
-                } catch (e: KeyManagementException) {
-                    throw IllegalStateException("insecure() SSL configuration failed", e)
-                }
-            }
-            return this
-        }
+//        @Suppress("unused")
+//        fun insecure(insecure: Boolean): Builder {
+//            // Nota bene: Similar code to this is also in Fineract Provider's
+//            // org.apache.fineract.infrastructure.hooks.processor.ProcessorHelper
+//            if (insecure) {
+//                val insecureHostnameVerifier =
+//                    HostnameVerifier { hostname: String?, session: SSLSession? -> true }
+//                okBuilder.hostnameVerifier(insecureHostnameVerifier)
+//
+//                try {
+//                    val insecureX509TrustManager: X509TrustManager = object : X509TrustManager {
+//                        @Throws(CertificateException::class)
+//                        override fun checkClientTrusted(
+//                            chain: Array<X509Certificate>,
+//                            authType: String
+//                        ) {
+//                        }
+//
+//                        @Throws(CertificateException::class)
+//                        override fun checkServerTrusted(
+//                            chain: Array<X509Certificate>,
+//                            authType: String
+//                        ) {
+//                        }
+//
+//                        override fun getAcceptedIssuers(): Array<X509Certificate> {
+//                            return arrayOf()
+//                        }
+//                    }
+//
+//                    // TODO "SSL" or "TLS" as in hooks.processor.ProcessorHelper?
+//                    val sslContext = SSLContext.getInstance("SSL")
+//                    sslContext.init(
+//                        null,
+//                        arrayOf<TrustManager>(insecureX509TrustManager),
+//                        SecureRandom()
+//                    )
+//                    val insecureSslSocketFactory = sslContext.socketFactory
+//
+//                    okBuilder.sslSocketFactory(insecureSslSocketFactory, insecureX509TrustManager)
+//                } catch (e: NoSuchAlgorithmException) {
+//                    throw IllegalStateException("insecure() SSL configuration failed", e)
+//                } catch (e: KeyManagementException) {
+//                    throw IllegalStateException("insecure() SSL configuration failed", e)
+//                }
+//            }
+//            return this
+//        }
 
         fun build(): FineractClient {
-            // URL
-            has<String?>("baseURL", baseURL)?.let { retrofitBuilder.baseUrl(it) }
 
-            // Tenant
-            val tenantAuth: ApiKeyAuth =
-                ApiKeyAuth("header", "fineract-platform-tenantid", tenant.toString())
-            okBuilder.addInterceptor(tenantAuth)
+            val ktorClient = HttpClient(CIO) {
+                install(ContentNegotiation) {
+                    json(Json {
+                        isLenient = true
+                        ignoreUnknownKeys = true
+                    })
+                }
+                install(Logging) {
+                    logger = Logger.DEFAULT
+                    level = LogLevel.INFO
+                }
+                install(Auth) {
+                    basic {
+                        credentials {
+                            BasicAuthCredentials(
+                                username = loginUsername.toString(),
+                                password = loginPassword.toString()
+                            )
+                        }
+                    }
+                }
 
-            // BASIC Auth
-            val basicAuth: HttpBasicAuth = HttpBasicAuth()
-            basicAuth.setCredentials(has("username", username), has("password", password))
-            okBuilder.addInterceptor(basicAuth)
+                defaultRequest {
+                    headers {
+                        append("Content-Type", "application/json")
+                        append("Accept", "application/json")
+                        tenant?.let {
+                            append("fineract-platform-tenantid", it)
+                        }
+                    }
+                }
 
-            val okHttpClient: OkHttpClient = okBuilder.build()
-            retrofitBuilder.client(okHttpClient)
+                if (insecure) {
+                    engine {
+                        https {
+                            val insecureTrustManager = object : X509TrustManager {
+                                override fun checkClientTrusted(
+                                    chain: Array<X509Certificate>,
+                                    authType: String
+                                ) {
+                                }
 
-            return FineractClient(okHttpClient, retrofitBuilder.build())
+                                override fun checkServerTrusted(
+                                    chain: Array<X509Certificate>,
+                                    authType: String
+                                ) {
+                                }
+
+                                override fun getAcceptedIssuers(): Array<X509Certificate> =
+                                    arrayOf()
+                            }
+
+                            try {
+                                val sslContext = SSLContext.getInstance("SSL").apply {
+                                    init(
+                                        null,
+                                        arrayOf<TrustManager>(insecureTrustManager),
+                                        SecureRandom()
+                                    )
+                                }
+                                trustManager = insecureTrustManager
+                            } catch (e: NoSuchAlgorithmException) {
+                                throw IllegalStateException("SSL configuration failed", e)
+                            } catch (e: KeyManagementException) {
+                                throw IllegalStateException("SSL configuration failed", e)
+                            }
+                        }
+                    }
+                }
+            }
+
+            val ktorfitBuilder = Ktorfit.Builder()
+                .httpClient(ktorClient)
+                .baseUrl(baseURL)
+                .build()
+
+
+//            // URL
+//            has<String?>("baseURL", baseURL)?.let { retrofitBuilder.baseUrl(it) }
+//
+//            // Tenant
+//            val tenantAuth: ApiKeyAuth =
+//                ApiKeyAuth("header", "fineract-platform-tenantid", tenant.toString())
+//            okBuilder.addInterceptor(tenantAuth)
+//
+//            // BASIC Auth
+//            val basicAuth: HttpBasicAuth = HttpBasicAuth()
+//            basicAuth.setCredentials(has("username", username), has("password", password))
+//            okBuilder.addInterceptor(basicAuth)
+//
+//            val okHttpClient: OkHttpClient = okBuilder.build()
+//            retrofitBuilder.client(okHttpClient)
+
+            return FineractClient(ktorClient, ktorfitBuilder)
         }
 
         @Throws(IllegalStateException::class)
